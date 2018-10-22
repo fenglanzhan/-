@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>三栏布局</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .father {
+            background-color: antiquewhite;
+            margin-top: 50px;
+            height: 80px;
+        }
+        .left {
+            background-color: aqua;
+            width: 100px;
+        }
+        .middle {
+            background-color: brown;
+        }
+        .right {
+            background-color: forestgreen;
+            width: 100px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 左右宽度固定，中间自适应 -->
+    <!-- flex -->
+    <style>
+        .father_flex {
+            display: flex;
+            flex-wrap: nowrap;
+        }
+        .father_flex .middle {
+            flex: 1;
+        }
+    </style>
+    <section class="father father_flex">
+        <article class="left">left</article>
+        <article class="middle">middle</article>
+        <article class="right">right</article>
+    </section>
+    <!-- float -->
+    <style>
+        .father_float .left {
+            float: left;
+        }
+        .father_float .middle {
+            /* BFC清楚浮动 */
+            overflow: hidden;
+        }
+        .father_float .right {
+            float: right;
+        }
+    </style>
+    <section class="father father_float">
+        <article class="left">left</article>
+        <article class="right">right</article>
+        <article class="middle">middle</article>
+    </section>
+    <!-- table -->
+    <style>
+        .father_table {
+            display: table;
+            width: 100%;
+        }
+        .father_table .left {
+            display: table-cell;
+        }
+        .father_table .middle {
+            display: table-cell;
+        }
+        .father_table .right {
+            display: table-cell;
+        }
+    </style>
+    <section class="father father_table">
+        <article class="left">left</article>
+        <article class="middle">middle</article>
+        <article class="right">right</article>
+    </section>
+    <!-- absolute -->
+    <style>
+        .father_absolute {
+            position: relative;
+        }
+        .father_absolute .left {
+            position: absolute;
+            left: 0;
+        }
+        .father_absolute .middle {
+            margin-left: 100px;
+            margin-right: 100px;
+        }
+        .father_absolute .right {
+            position: absolute;
+            right: 0;
+        }
+    </style>
+    <section class="father father_absolute">
+        <article class="left">left</article>
+        <article class="right">right</article>
+        <article class="middle">middle</article>
+    </section>
+    <!-- grid -->
+    <style>
+        .father_grid {
+            display: grid;
+            grid-template-columns: 100px auto 100px;
+        }
+    </style>
+    <section class="father father_grid">
+        <article class="left">left</article>
+        <article class="middle">middle</article>
+        <article class="right">right</article>
+    </section>
+</body>
+</html>
