@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>垂直居中</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .parent {
+            background-color: aqua;
+            margin: 10px 0;
+            height: 100px;
+        }
+        .child {
+            background-color: brown;
+        }
+    </style>
+</head>
+<body>
+    <!--方法1： absolute + transform -->
+    <style>
+        .parent_1 {
+            position: relative;
+        }
+        .child_1 {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+    </style>
+    <section class="parent parent_1">
+        <article class="child child_1">我要垂直居中</article>
+    </section>
+    <!--方法2： flex + align-items -->
+    <style>
+        .parent_2 {
+            display: flex;
+            align-items: center;
+        }
+        .child_2 {
+            
+        }
+    </style>
+    <section class="parent parent_2">
+        <article class="child child_2">我要垂直居中</article>
+    </section>
+    <!--方法3： table-cell + vertial-align -->
+    <style>
+        .parent_3 {
+            margin-top: 42px;
+            display: table-cell;
+            vertical-align: middle;
+        }
+        .child_4 {
+            
+        }
+    </style>
+    <section class="parent parent_3">
+        <article class="child child_3">我要垂直居中</article>
+    </section>
+</body>
+</html>

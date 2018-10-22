@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>双向居中</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .parent {
+            background-color: aqua;
+            margin: 10px 0;
+            height: 100px;
+        }
+        .child {
+            background-color: brown;
+        }
+    </style>
+</head>
+<body>
+    <!-- flex -->
+    <style>
+        .parent_1 {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+    <section class="parent parent_1">
+        <article class="child child_1">居中</article>
+    </section>
+    <!-- 绝对定位 -->
+    <style>
+        .parent_2 {
+            position: relative;
+        }
+        .child_2 {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%)
+        }
+    </style>
+    <section class="parent parent_2">
+        <article class="child child_2">居中</article>
+    </section>
+    <!-- table -->
+    <style>
+        .parent_3 {
+            display: table-cell;
+            text-align: center;
+            vertical-align: middle;
+        }
+        .child_3 {
+            display: inline-block;
+        }
+    </style>
+    <section class="parent parent_3">
+        <article class="child child_3">居中</article>
+    </section>
+</body>
+</html>

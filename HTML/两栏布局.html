@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>两栏布局</title>
+</head>
+<body>
+    <!-- 左宽固定，右侧自适应 -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+        .father {
+            margin-top: 100px;
+        }
+        .left {
+            background-color: aqua;
+        }
+        .right {
+            background-color: blueviolet;
+        }
+    </style>
+    <!-- float布局 -->
+    <style>
+        .father_float .left {
+            float: left;
+            width: 300px;
+            /* margin-right: 10px; */
+        }
+        .father_float .right {
+            overflow: hidden;
+        }
+    </style>
+    <section class="father father_float">
+        <article class="left">
+                <img src="https://via.placeholder.com/200x100" alt="">
+        </article>
+        
+        <article class="right">float_right</article>
+    </section>
+    <!-- table布局 -->
+    <style>
+        /* 缺点：两栏高度会一致，会有一柱擎天的效果出现(仅限于汉字) */
+        .father.father_table {
+            display: table;
+            width: 100%;
+        }
+        .father_table .left {
+            width: 300px;
+            display: table-cell;
+        }
+        .father_table .right {
+            display: table-cell;
+        }
+    </style>
+    <section class="father father_table">
+        <article class="left">
+                <img src="https://via.placeholder.com/200x100" alt="">
+        </article>
+        
+        <article class="right">table_right</article>
+    </section>
+    <!-- flex布局 -->
+    <style>
+        .father.father_flex {
+            display: flex;
+        }
+        .father_flex .left {
+            width: 300px;
+            /* margin-right: 10px; */
+        }
+        .father_flex .right {
+            flex: 1;
+        }
+    </style>
+    
+    <section class="father father_flex">
+        <article class="left">
+                <img src="https://via.placeholder.com/200x100" alt="">
+        </article>
+        
+        <article class="right">flex_right</article>
+    </section>
+    <style>
+        /* 绝对定位 */
+        .father.father_absolute {
+            position: relative;
+        }
+        .father_absolute .left {
+            position: absolute;
+            left: 0;
+            width: 300px;
+        }
+        .father_absolute .right {
+            margin-left: 300px;
+        }
+    </style>
+    <section class="father father_absolute">
+        <article class="left">
+                <img src="https://via.placeholder.com/200x100" alt="">
+        </article>
+        
+        <article class="right">absolute_right</article>
+    </section>
+    <style>
+        /* grid布局 */
+        .father_grid {
+            display: grid;
+            grid-template-columns: 300px auto;
+        } 
+    </style>
+    
+    <section class="father father_grid">
+        <article class="left">
+                <img src="https://via.placeholder.com/200x100" alt="">
+        </article>
+        
+        <article class="right">grid_right</article>
+    </section>
+    
+
+    <!-- 右宽固定，左侧自适应 -->
+    <!-- float布局：将上面的float改为right，margin-right改为margiin-left -->
+    <!-- table布局： left和right的属性互换即可-->
+    <!-- flex布局： father上加入flex-direction: row-reverse-->
+    <!-- 绝对定位： left加入right:0，修改right的margin方向-->
+    <!-- grid布局：将grid-template-columns修改为auto 300px -->
+    <!-- 上高固定，下自适应 -->
+</body>
+</html>
