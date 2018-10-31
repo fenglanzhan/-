@@ -86,3 +86,86 @@ zepto中将方法放在$.fn上，jQuery是封装在jQuery.fn，此处主要是�
   zepto.Z.prototype = Z.prototype = $.fn
 ```
 ## 继承
+### 类的方法：实际是一种语法糖，下面是ts编译的js代码，可以对比一下
+静态成员：类自身成员，可以继承，但是实例无法访问，一般多见于工具类
+私有变量：类内部成员，一般不能继承，只能在内部使用，实例无法访问
+getter/setter：存储器属性
+实例成员：new的实例对象所具有的成员，可以被继承，也可以通过此属性实现代码的复用
+抽象类、抽象方法：抽象类，指不可以被实例化的类，通过new调用时会报错，一般设计成父类；抽象方法，只提供方法名、参数、返回值，不负责实现，具体实现由子类完成。如果子类继承抽象类，必须实现父类所有的抽象方法
+extends：用来在两个类之间建立[[prototype]]连接，例如class Bar extends Foo，即为Bar.prototype.\__proto__ = Foo.prototype
+
+```
+// typescript
+class Animal{ 
+    type: string;
+    constructor() { 
+        this.type = 'animal'
+    }
+}
+class Dog extends Animal { 
+    constructor() { 
+        super()
+    }
+}
+var dog = new Dog();
+console.log(dog);
+
+// 编译后的js
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Animal = /** @class */ (function () {
+    function Animal() {
+        this.type = 'animal';
+    }
+    return Animal;
+}());
+var Dog = /** @class */ (function (_super) {
+    __extends(Dog, _super);
+    function Dog() {
+        return _super.call(this) || this;
+    }
+    return Dog;
+}(Animal));
+var dog = new Dog();
+console.log(dog);
+```
+### 构造函数和原型链
+```
+function Animal(){
+  this.type = 'Animal';
+}
+// 构造函数方式:在子构造函数中调用父类构造函数
+// 部分继承：如果父类的属性和方法都在构造函数中，可以实现全部继承；无法继承父类原型的方法
+function Dog(){
+  Animal.call(this);
+}
+// 借助原型链实现继承
+// 共享原型对象的属性和方法
+function Cat(){
+}
+Cat.prototype = new Animal();
+// 组合方式
+// Animal构造函数调用两次；无法确定实例对象是否由子类直接实例化
+function Elephant(){
+  Animal.call(this)
+}
+Elephant.prototype = new Animal();
+// 改进一
+// 无法确定实例对象是否由子类直接实例化
+Elephant.prototype = Animal.prototype;
+// 改进二
+Elephant.prototype = Object.create(Animal.prototype);
+Elephant.prototype.constructor = Elephant
+
+```
