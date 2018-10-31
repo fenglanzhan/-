@@ -85,6 +85,18 @@ zepto中将方法放在$.fn上，jQuery是封装在jQuery.fn，此处主要是�
   // 构建原型链
   zepto.Z.prototype = Z.prototype = $.fn
 ```
+### 判断变量类型
+1. 使用typeof判断是否为基础类型
+2. 如果typeof为object，使用(typeof value == 'object') && ( value instanceof Object)，判断是否为null(false为null)
+3. 如果为true，使用Object.prototype.toString.call(value).slice(8,-1)获得具体类型
+### 判断变量是否为数组
+1. ES5：Array.isArray()
+2. value instanceof Array
+3. Object.prototype.toString.call(value).slice(8, -1) === 'array'
+### 属性遍历
+1. hasOwnProperty：自身属性
+2. in：自身属性及原型属性
+3. for in：循环原型链和自身可枚举属性
 ## 继承
 ### 类的方法：实际是一种语法糖，下面是ts编译的js代码，可以对比一下
 静态成员：类自身成员，可以继承，但是实例无法访问，一般多见于工具类
@@ -167,5 +179,103 @@ Elephant.prototype = Animal.prototype;
 // 改进二
 Elephant.prototype = Object.create(Animal.prototype);
 Elephant.prototype.constructor = Elephant
-
 ```
+## this和闭包
+### this：**注意隐式丢失的问题**
+1. new调用绑定到新创建的对象
+2. 使用call、apply、bind调用绑定到指定对象
+  1. call、apply都可以改变this的指向，区别是apply参数传递的形式是数组
+  2. 模拟call、apply实现
+  ```
+  // call实现
+  Functin.prototype.call_ = function() {
+    // 取出需要绑定的对象，如果不存在，则为window对象
+    var argusArray = [...arguments].slice(0);
+    var context = argus.shift() || window;
+    // 思路：我们用上下文调用来实现call的绑定，一般使用对象的方法调用，也就是将方法挂到需要需要绑定的对象上，通过该对象来调用该方法
+    // 根据this绑定原则，当前的this指向为需要执行的函数。例如get.call(a)，即为get
+    context.fn = this;
+    // 传递参数
+    var result = context.fn(...argusArray);
+    delete context.fn; // context.fn = null;
+    return result;
+  }
+  ```
+  ```
+  // apply实现
+  Function.prototype.apply_ = function() {
+    var argsArray = [...arguments].slice(0);
+    var context = argsArray.shift() || window;
+    context.fn = this;
+    var result = context.fn(...argsArray)
+    delete context.fn;
+    return result;
+  }
+  ```
+  ```
+  // bind实现
+  Function.prototype.bind_ = function() {
+    
+  }
+  ```
+3. 上下文调用，按照某个对象的方法调用，绑定到上下文对象
+4. 默认情况下：严格模式绑定到undefined，非严格模式绑定到window
+5. 箭头函数：箭头函数没有this，取决于外面第一个不是箭头函数的函数的this，而且一旦绑定，不能改变
+### 闭包
+1. 闭包是：有权访问另一个函数作用域中的变量的函数
+2. 闭包的缺点：占用内存；内存泄漏(为什么会有内存泄漏，一直也不懂)
+3. 使用场景：函数作为返回值或者参数传递
+  ```
+    function A() {
+      let a = 1
+      function B() {
+          console.log(a)
+      }
+      return B
+    }
+  ```
+  解释：为什么函数 A 已经弹出调用栈了，为什么函数 B 还能引用到函数 A 中的变量。因为函数 A 中的变量这时候是存储在堆上的。现在的 JS 引擎可以通过逃逸分析辨别出哪些变量需要存储在堆上，哪些需要存储在栈上。
+4. 实际开发中使用闭包：封装变量，收敛权限(有一个课程里说的，没实际使用过)
+```
+function isFirstLoad() {
+  var _list = [];
+  return function(id) {
+      if(_list.index(id) >= 0){
+          return false
+      }else{
+          _list.push(id);
+          return true
+      }
+  }
+ }
+
+ // 使用
+ var first = isFirstLoad();
+ firstLoad(10); // true
+ firstLoad(10); // false
+```
+## 事件
+### DOM事件级别
+1. DOM0级:ele.onclick = function() {}
+2. DOM2级:ele.addEventListener('click', function() {}, false)
+3. DOM3级:在DOM2级添加了很多事件类型  
+  1. 移动端常用的H5事件
+### 事件流
+3. DOM3级:在DOM2级添加了很多事件类型
+1. 事件类型：事件捕获和事件冒泡
+2. 事件流：事件通过事件捕获达到目标阶段，通过事件冒泡从目标元素上传到window对象
+3. 描述DOM事件流的具体流程：事件捕获阶段从window对象，经过document、html(document.documentElement)、body一直到达目标元素，按照此顺序逆向冒泡到window对象
+4. Event对象常见应用
+  1. 阻止默认行为：event.preventDefault();IE：window.event.returnValue=false
+  2. 阻止事件冒泡：event.stopPropogation();IE：window.event.cancelBubble()
+  3. 阻止后续事件：event.stopImmediatePropagation()
+  4. 获取点击的目标元素：event.target；IE：event.srcElement
+  5. 获取绑定的事件元素：event.currentTarget
+5. 自定义事件
+  ```
+  // 定义事件类型
+  var eve = new Event('tap');
+  element.addEventListener('tap',function(){});
+  // 触发指定事件类型
+  element.dispatchEvent(eve);
+  ```
