@@ -266,16 +266,17 @@ function isFirstLoad() {
 2. 事件流：事件通过事件捕获达到目标阶段，通过事件冒泡从目标元素上传到window对象
 3. 描述DOM事件流的具体流程：事件捕获阶段从window对象，经过document、html(document.documentElement)、body一直到达目标元素，按照此顺序逆向冒泡到window对象
 4. Event对象常见应用
-  1. 阻止默认行为：event.preventDefault();IE：window.event.returnValue=false
-  2. 阻止事件冒泡：event.stopPropogation();IE：window.event.cancelBubble()
-  3. 阻止后续事件：event.stopImmediatePropagation()
-  4. 获取点击的目标元素：event.target；IE：event.srcElement
-  5. 获取绑定的事件元素：event.currentTarget
+    1. 阻止默认行为：event.preventDefault();IE：window.event.returnValue=false
+    2. 阻止事件冒泡：event.stopPropogation();IE：window.event.cancelBubble()
+    3. 阻止后续事件：event.stopImmediatePropagation()
+    4. 获取点击的目标元素：event.target；IE：event.srcElement
+    5. 获取绑定的事件元素：event.currentTarget
 5. 自定义事件
   ```
-  // 定义事件类型
+  // 定义事件类型Event
   var eve = new Event('tap');
   element.addEventListener('tap',function(){});
   // 触发指定事件类型
   element.dispatchEvent(eve);
+  // CustomEvent，可传参
   ```
