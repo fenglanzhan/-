@@ -277,5 +277,8 @@ function isFirstLoad() {
   element.addEventListener('tap',function(){});
   // 触发指定事件类型
   element.dispatchEvent(eve);
-  // CustomEvent，可传参
+  // CustomEvent，可传递参数
+  var cusEve = new CustomEvent('anytap', {detail: 'this is a customeEvent'});
+  element.addEventListener('anytap', function(e){console.log(e.detail)});
+  element.dispatch(cusEve)
   ```
