@@ -261,7 +261,6 @@ function isFirstLoad() {
 3. DOM3级:在DOM2级添加了很多事件类型  
   1. 移动端常用的H5事件
 ### 事件流
-3. DOM3级:在DOM2级添加了很多事件类型
 1. 事件类型：事件捕获和事件冒泡
 2. 事件流：事件通过事件捕获达到目标阶段，通过事件冒泡从目标元素上传到window对象
 3. 描述DOM事件流的具体流程：事件捕获阶段从window对象，经过document、html(document.documentElement)、body一直到达目标元素，按照此顺序逆向冒泡到window对象
