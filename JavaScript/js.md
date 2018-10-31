@@ -259,7 +259,17 @@ function isFirstLoad() {
 1. DOM0级:ele.onclick = function() {}
 2. DOM2级:ele.addEventListener('click', function() {}, false)
 3. DOM3级:在DOM2级添加了很多事件类型  
-  1. 移动端常用的H5事件
+  1. 移动端
+    1. 触摸事件
+      1. touchstart
+      2. touchmove
+      3. touchend
+      4. touchcancel
+    2. 手势事件
+      1. gesturestart
+      2. gesturechange
+      3. gestureend
+  2. DOMContentLoaded与load事件的区别：DOMContentLoaded事件触发代表初始的HTML 被完全加载和解析，不需要等待CSS，JS，图片加载；而load事件表示页面中的DOM，CSS，JS，图片已经全部加载完毕。
 ### 事件流
 1. 事件类型：事件捕获和事件冒泡
 2. 事件流：事件通过事件捕获达到目标阶段，通过事件冒泡从目标元素上传到window对象
@@ -282,3 +292,6 @@ function isFirstLoad() {
   element.addEventListener('anytap', function(e){console.log(e.detail)});
   element.dispatch(cusEve)
   ```
+### 事件委托
+将事件统一绑定到父级元素，原理：事件冒泡。适合采取事件委托的事件：click、mousedown、mouseup、keydown、keyup、keypress  
+好处：节省内存；不需要给子节点注销事件
