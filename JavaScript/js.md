@@ -354,7 +354,7 @@ function isFirstLoad() {
 ## Promise
 1. 状态：pending、resolved、rejected
 2. 实例：使用Promise实现图片的异步加载
-3. 实例
+3. 实例：Promise实现ajax请求
 ## async/await
 ## Ajax&&跨域
 1. 同源：域名、端口、协议都相同即为同源
