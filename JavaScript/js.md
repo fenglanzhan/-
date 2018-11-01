@@ -1,7 +1,7 @@
 > 此文档大部分参考https://github.com/InterviewMap/CS-Interview-Knowledge-Map中的内容，结合自己的部分笔记进行整理。更多内容请阅读上面的github。如果涉及侵权，请留言。
 
 ## 原型
-![原型链]("./原型.png")
+![原型链]("https://github.com/fenglanzhan/front_study/blob/master/JavaScript/%E5%8E%9F%E5%9E%8B.png")
 1. 每个函数都有prototype属性，该属性保存该函数的原型的指针
 2. 所有引用对象属性都可以自由扩展，null除外
 3. 所有引用对象都有[[Prototype]]内部属性，可以通过__proto__访问此属性，该属性指向该对象构造函数的原型
