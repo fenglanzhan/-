@@ -1,3 +1,5 @@
+> 此文档大部分参考https://github.com/InterviewMap/CS-Interview-Knowledge-Map中的内容，结合自己的部分笔记进行整理。更多内容请阅读上面的github。如果涉及侵权，请留言。
+
 ## 原型
 1. 每个函数都有prototype属性，该属性保存该函数的原型的指针
 2. 所有引用对象属性都可以自由扩展，null除外
@@ -214,8 +216,21 @@ Elephant.prototype.constructor = Elephant
   ```
   ```
   // bind实现
-  Function.prototype.bind_ = function() {
-    
+  // bind的实现还不是特别明白
+  Function.prototype.bind_ = function (context) {
+    if (typeof this !== 'function') {
+      throw new TypeError('Error')
+    }
+    var _this = this
+    var args = [...arguments].slice(1)
+    // 返回一个函数
+    return function F() {
+      // 因为返回了一个函数，我们可以 new F()，所以需要判断
+      if (this instanceof F) {
+        return new _this(...args, ...arguments)
+      }
+      return _this.apply(context, args.concat(...arguments))
+    }
   }
   ```
 3. 上下文调用，按照某个对象的方法调用，绑定到上下文对象
@@ -303,5 +318,107 @@ function isFirstLoad() {
 
 ## 事件循环
 1. js单线程的原因：避免DOM渲染冲突
-2. 事件轮询event-loop是异步的一种解决方案，简单来说就是：同步代码顺序执行，异步事件放入任务队列中，同步代码执行完毕后，轮询执行任务队列的事件
+2. 异步机制
+  1. js的异步机制由事件循环和任务队列构成。
+  2. js本身是单线程的，所谓异步是依赖浏览器或者操作系统完成的
+  3. js主线程有一个执行栈和一个任务队列，主线程依次执行代码，执行环境顺序入栈，执行完毕后出栈，直到代码执行完毕。当遇到异步事件(延时、网络请求、事件绑定)时，会将异步事件放入任务队列，当执行栈为空时，读取任务队列的异步事件。
+  4. 一个浏览器环境只能有一个事件循环，一个事件循环可以有多个任务队列，每个任务队列有一个任务源。同一个任务队列必须按照先进先出的顺序执行。
+  5. 宏任务macrotask：整体代码、setTimeout、setInterval、setImmediate、I/O、UI rendering
+  6. 微任务microtask：Promise、Object.observe、nextTick、process
+  7. 执行顺序：首先在Macrotask中取出第一个任务，执行完毕后顺序处理Microtask中所有任务；之后再去Macrotask，周而复始。
+  8. 在 ES6 规范中，microtask 称为 jobs，macrotask 称为 task
+3. 事件循环简单来说就是：同步代码顺序执行，异步事件放入任务队列中，同步代码执行完毕后，轮询执行任务队列的事件
+  1. 调用栈：js执行时会形成调用栈，执行环境(函数返回地址、参数、局部变量等)顺序入栈。执行结束后会弹出栈
+  2. 尾调用：尾调优化。只某个函数的最后一步是调用另一个函数。由调用栈可知，a调用b，调用栈有a和b。但是如果b是a的最后一步，并且不需要保留外层函数调用记录，即a函数调用位置变量等都不需要用到，则该调用栈只会保留b函数，称为“尾调优化”，即只保留内层函数的调用记录
+4. nodejs：process.nextTick > promise.then > setTimeout > setImmediate(process.nextTick永远大于 promise.then)
+  ```
+  console.log('script start');
+
+  setTimeout(function() {
+    console.log('setTimeout');
+  }, 0);
+
+  new Promise((resolve) => {
+      console.log('Promise'); // 这是同步代码
+      resolve()
+  }).then(function() {
+    console.log('promise1');
+  }).then(function() {
+    console.log('promise2');
+  });
+
+  console.log('script end');
+  // script start => Promise => script end => promise1 => promise2 => setTimeout
+  ```
+
+## Promise
+1. 状态：pending、resolved、rejected
+2. 实例：使用Promise实现图片的异步加载
 3. 
+## async/await
+## Ajax&&跨域
+1. 同源：域名、端口、协议都相同即为同源
+2. 非同源限制：无法操作DOM、ajax请求不能发送、cookie及localstorage无法获取
+3. 前后端通信方法
+  1. ajax：同源
+  ```javascript
+    var xhr = new XMLHttpRequest();
+    xhr.open('get',url,true);
+    xhr.send(null);
+    xhr.onload = function() {
+      if(xhr.status >= 200 && xhr.status < 300 || xhr.status == 304){
+        JSON.parse(xhr.responseText)
+      }else{
+        console.log('error');
+      }
+    }
+  ```
+  2. websocket：不限制
+  3. CORS：跨域资源共享，h5新标准
+4. 跨域通信的方式
+  1. JSONP：script标签的src属性不受同源策略限制
+  2. hash：url中hash值改变，不会刷新页面#
+  3. postMessage：H5新增API
+  4. WebSocket
+  5. CROS
+## 安全
+## 存储
+## HTTP协议
+1. 主要特点：无状态(不记录客户身份)、无连接(不保持连接)、简单快速
+2. HTTP报文组成
+  1. 请求报文：请求行、请求头、空行、请求体
+  2. 响应报文：状态行、响应头、空行、响应体
+3. HTTP方法
+  1. GET：获取资源
+  2. POST：传输资源
+  3. PUT：更新资源
+  4. DELETE：删除资源
+  5. HEAD：获取报文首部
+4. POST和GET方法的区别
+  1. post请求方法在页面回退时会重新提交
+  2. get参数通过url传递，post通过请求体传递数据
+  3. get请求参数有长度限制
+  4. get请求参数会被保存浏览器历史记录中
+  5. get请求产生的url可以被收藏
+  6. get会暴露参数，不能用来传递敏感信息
+  7. get请求可以被浏览器缓存
+5. HTTP状态码
+  1. 1XX：指示信息，表示请求已收到
+  2. 2XX：成功，请求已被成功接收
+    1. 200 OK：客户端请求成功
+    2. 206 ：常用于video或audio
+  3. 3XX：重定向
+    1. 301：永久转移
+    2. 302：临时转移
+    3. 304：缓存文件可用
+  4. 4XX：客户端错误
+    1. 400 Bad Request：请求语法错误，服务器无法解析
+    2. 401 Unauthorized：请求未经授权
+    3. 403 Forbidden：禁止访问资源
+    4. 404 Not Found：请求资源不存在
+  5. 5XX：服务器错误
+    1. 500
+    2. 503
+6. 持久连接：HTTP1.1版本支持keep-alive，连接持续有效，避免重新建立连接
+## 缓存
+## 渲染机制
