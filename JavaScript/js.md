@@ -354,13 +354,30 @@ function isFirstLoad() {
 
 ## Promise
 1. 状态：pending、resolved、rejected
-2. 实例：使用Promise实现图片的异步加载
-3. 实例：Promise实
+
 ## async/await
+## 模块化
+1. AMD：异步模块定义规范
+  1. 代表工具：requireJs
+2. CMD：
+3. ES模块化
 ## Ajax&&跨域
-1. 同源：域名、端口、协议都相同即为同源
-2. 非同源限制：无法操作DOM、ajax请求不能发送、cookie及localstorage无法获取
-3. 前后端通信方法
+1. XMLHttpReques对象
+  1. status：HTTP状态码
+  2. responseText
+  3. readyState
+    1. 0：未初始化，未调用open方法
+    2. 1：open，未调用send方法
+    3. 2：send，未接收到响应
+    4. 3：接收部分数据
+    5. 4：接收全部数据，可使用
+2. 同源：域名、端口、协议都相同即为同源
+3. 非同源限制：无法操作DOM、ajax请求不能发送、cookie及localstorage无法获取
+4. 可跨域的三个标签属性
+  1. script的src
+  2. img的src
+  3. link的href
+5. 前后端通信方法
   1. ajax：同源
   ```javascript
     var xhr = new XMLHttpRequest();
@@ -377,13 +394,85 @@ function isFirstLoad() {
   2. websocket：不限制
   3. CORS：跨域资源共享，h5新标准
 4. 跨域通信的方式
-  1. JSONP：script标签的src属性不受同源策略限制
-  2. hash：url中hash值改变，不会刷新页面#
-  3. postMessage：H5新增API
+  1. JSONP：script标签的src属性不受同源策略限制；只能用get
+    ```javascript
+      function jsonp(url, callbackname, success) {
+        let script = document.createElemnt('script');
+        script.src = url;
+        script.type = 'type/javascript';
+        script.async = true;
+        window[callbackname] = function(data) {
+          sucxess && success(data)
+        }
+        document.body.appendChild(script);
+      }
+    ```
+  2. document.domain：基础域名相同，子域名不同：例如a.test.com和b.test.com，设置document.domain = 'test.com'
+  3. hash：url中hash值改变，不会刷新页面#
+    ```javascript
+        // A嵌入iframe B
+        var B = ducument.createElement('iframe');
+        B.src = B + '#' + 'data'; //hash值字符串形式
+        // B中伪代码
+        window.onhashchange = function() {
+            var data = window.location.hash;
+            // 处理
+        }
+    ```
+  4. postMessage：H5新增API
+  ```javascript
+        // PostMessage
+        // 窗口A(http://a.com)
+        window.postMessage('dataForm', 'https://www.baidu.com');
+        // 在B窗口监听
+        window.addEventListener('message', function(event) {
+            console.log(event.origin); // http://a.com
+            console.log(event.source); // A窗口的引用
+            console.log(event.data); // dataForm
+        }, false);
+  ```
   4. WebSocket
-  5. CROS
+   ```javascript
+        // websocket
+        // url:你要发送消息建立连接的url
+        var ws = new WebSocket('wss://a.websocket.com');
+        ws.onopen = function(evt) {
+            console.log('Connection open ...');
+            ws.send('hello websocket');
+        }
+        ws.onmessage = function(evt) {
+            console.log('Received message:' + evt.data);
+        }
+        ws.onclose = function(evt) {
+            console.log('Connection closed ...');
+        }
+   ```
+  5. CROS：后台header中设置header("Access-Control-Allow-Origin:*")
+   ```javascript
+        // CORS:自己参考阮一峰老师的blog
+        fetch(url, {method: 'get'}).then(function(response) {
+
+        }).catch(function(err) {
+            console.log(err);
+        })
+   ```
 ## 安全
+1. Cookie安全性问题
+   | 属性 | 作用 |
+   | --- | ---|
+   | value | 如果保存用户登录转台，需要加密，不能明文|
+   | http-only | 不允许js访问cookie，减少xss攻击|
+   | secure | 只能在https中携带|
+   | same-site | 规定浏览器不能在跨域请求中携带 Cookie，减少 CSRF 攻击 |
+2. XSS跨站请求攻击（输入脚本）
+3. XSRF跨站请求伪造(伪链接)：增加验证流程，如果输入指纹、密码、短信验证
 ## 存储
+  | 特性 | Cookie | LocalStorage | SessionStorage |IndexDB |
+  | --- | --- | --- | --- | --- |
+  | 数据声明周期 | 一般由服务器生成，可设置过期时间 | 除非被清理，否则一直存在 | 页面关闭即清理 | 除非被清理，否则一直存在
+  | 数据存储大小 | 4KB | 5M | 5M | 无限 |
+  | 与服务器端通信| 每次会在header中携带，影响性能 | 不参与 | 不参与 | 不参与 | 
+  | 备注 | | IOS safari隐藏模式下，localStorage.getItem会报错，建议同意使用try-catch封装 |
 ## HTTP协议
 1. 主要特点：无状态(不记录客户身份)、无连接(不保持连接)、简单快速
 2. HTTP报文组成
@@ -422,4 +511,24 @@ function isFirstLoad() {
     2. 503
 6. 持久连接：HTTP1.1版本支持keep-alive，连接持续有效，避免重新建立连接
 ## 缓存
+1. 强缓存
+  1. Expires：缓存的过期时间，指服务器时间，在过期时间前可使用
+  2. Cache-Control
+    1. max-age：缓存的最大有效时间，优先级高于Expires
+    2. s-max-age
+    3. no-cache
+    4. no-store
+    5. private
+    6. public
+2. 协商缓存
+  1. last-modified/if-Modified-since
+    1. last-modified：该文件的最后修改时间，由服务器发送
+    2. if-modified-since：客户端保存的文件最后修改时间，由客户端发送
+    3. 需要和cache-control共同使用，也就是在cache-control判断文件过期时，通过这两个属性来协商缓存
+  2. Etag/If-None-Match
+    1. Etag：文件的hash值，内容改变，hash就会改变
+    2. If-None-Match：客户端存储的文件hash值
+    3. 同cache-control共同使用
+    4. 比last-modified精确度更高，优先级高
 ## 渲染机制
+
