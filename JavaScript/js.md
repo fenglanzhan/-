@@ -304,9 +304,9 @@ Elephant.prototype.constructor = Elephant
       return B
     }
     ```
-  解释：为什么函数 A 已经弹出调用栈了，为什么函数 B 还能引用到函数 A 中的变量。因为函数 A 中的变量这时候是存储在堆上的。现在的 JS 引擎可以通过逃逸分析辨别出哪些变量需要存储在堆上，哪些需要存储在栈上。  
+      解释：为什么函数 A 已经弹出调用栈了，为什么函数 B 还能引用到函数 A 中的变量。因为函数 A 中的变量这时候是存储在堆上的。现在的 JS 引擎可以通过逃逸分析辨别出哪些变量需要存储在堆上，哪些需要存储在栈上。  
 4. 实际开发中使用闭包：封装变量，收敛权限(有一个课程里说的，没实际使用过)  
-   ```javascript
+      ```javascript
       function isFirstLoad() {
         var _list = [];
         return function(id) {
@@ -322,7 +322,7 @@ Elephant.prototype.constructor = Elephant
       var first = isFirstLoad();
       firstLoad(10); // true
       firstLoad(10); // false
-  ```
+      ```
 ### 垃圾回收
 1. js执行环境负责管理代码执行过程中使用的内存。其原理是：找出那些不再继续使用的比那辆，然后释放其占用内存，周期性执行。
 2. 垃圾回收方式
