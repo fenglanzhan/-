@@ -338,7 +338,7 @@ Elephant.prototype.constructor = Elephant
       1. touchstart
       2. touchmove
       3. touchend
-      4. touchcancel
+      4. touchcancel  
     2. 手势事件
       1. gesturestart
       2. gesturechange
