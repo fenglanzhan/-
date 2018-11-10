@@ -371,18 +371,21 @@ Elephant.prototype.constructor = Elephant
 好处：节省内存；不需要给子节点注销事件
 
 ## 事件循环
-1. js单线程的原因：避免DOM渲染冲突
-2. 异步机制
+1. js是单线程、非阻塞、异步、解释性脚本语言：single-thread、non-blocking、asynchronus、concurrent。
+      one thread == one call stack == one thing at a time
+2. js单线程的原因：避免DOM渲染冲突
+3. 异步机制
   1. js的异步机制由事件循环和任务队列构成。
   2. js本身是单线程的，所谓异步是依赖浏览器或者操作系统完成的
-  3. js主线程有一个执行栈和一个任务队列，主线程依次执行代码，执行环境顺序入栈，执行完毕后出栈，直到代码执行完毕。当遇到异步事件(延时、网络请求、事件绑定)时，会将异步事件放入任务队列，当执行栈为空时，读取任务队列的异步事件。  一个浏览器环境只能有一个事件循环，一个事件循环可以有多个任务队列，每个任务队列有一个任务源。同一个任务队列必须按照先进先出的顺序执行。  
+  3. js主线程有一个执行栈和一个任务队列，主线程依次执行代码，执行环境顺序入栈，执行完毕后出栈，直到代码执行完毕。当遇到异步事件(延时、网络请求、事件绑定)时，会将异步事件放入任务队列，当执行栈为空时，读取任务队列的异步事件。 
+  一个浏览器环境只能有一个事件循环，一个事件循环可以有多个任务队列，每个任务队列有一个任务源。同一个任务队列必须按照先进先出的顺序执行。  
   宏任务macrotask：整体代码、setTimeout、setInterval、setImmediate、I/O、UI rendering
   微任务microtask：Promise、Object.observe、nextTick、process
   执行顺序：首先在Macrotask中取出第一个任务，执行完毕后顺序处理Microtask中所有任务；之后再去Macrotask，周而复始。
   在 ES6 规范中，microtask 称为 jobs，macrotask 称为 task
-  事件循环简单来说就是：同步代码顺序执行，异步事件放入任务队列中，同步代码执行完毕后，轮询执行任务队列的事件
+  事件循环简单来说就是：同步代码顺序执行，异步事件放入任务队列中，同步代码执行完毕后，轮询执行任务队列的事件  
   尾调用：尾调优化。只某个函数的最后一步是调用另一个函数。由调用栈可知，a调用b，调用栈有a和b。但是如果b是a的最后一步，并且不需要保留外层函数调用记录，即a函数调用位置变量等都不需要用到，则该调用栈只会保留b函数，称为“尾调优化”，即只保留内层函数的调用记录
-3. nodejs：process.nextTick > promise.then > setTimeout > setImmediate(process.nextTick永远大于 promise.then)
+4. nodejs：process.nextTick > promise.then > setTimeout > setImmediate(process.nextTick永远大于 promise.then)
     ```javascript
       console.log('script start');
 
