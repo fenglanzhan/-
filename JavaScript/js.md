@@ -333,17 +333,16 @@ Elephant.prototype.constructor = Elephant
 1. DOM0级:ele.onclick = function() {}
 2. DOM2级:ele.addEventListener('click', function() {}, false)
 3. DOM3级:在DOM2级添加了很多事件类型  
-  1. 移动端
     1. 触摸事件
-      1. touchstart
-      2. touchmove
-      3. touchend
-      4. touchcancel  
+        1. touchstart
+        2. touchmove
+        3. touchend
+        4. touchcancel  
     2. 手势事件
-      1. gesturestart
-      2. gesturechange
-      3. gestureend
-  2. DOMContentLoaded与load事件的区别：DOMContentLoaded事件触发代表初始的HTML 被完全加载和解析，不需要等待CSS，JS，图片加载；而load事件表示页面中的DOM，CSS，JS，图片已经全部加载完毕。
+        1. gesturestart
+        2. gesturechange
+        3. gestureend
+    3. DOMContentLoaded与load事件的区别：DOMContentLoaded事件触发代表初始的HTML 被完全加载和解析，不需要等待CSS，JS，图片加载；而load事件表示页面中的DOM，CSS，JS，图片已经全部加载完毕。
 ### 事件流
 1. 事件类型：事件捕获和事件冒泡
 2. 事件流：事件通过事件捕获达到目标阶段，通过事件冒泡从目标元素上传到window对象
@@ -566,10 +565,10 @@ Elephant.prototype.constructor = Elephant
         2. 302：临时转移
         3. 304：缓存文件可用
       4. 4XX：客户端错误
-        1. 400 Bad Request：请求语法错误，服务器无法解析
-        2. 401 Unauthorized：请求未经授权
-        3. 403 Forbidden：禁止访问资源
-        4. 404 Not Found：请求资源不存在
+          1. 400 Bad Request：请求语法错误，服务器无法解析
+          2. 401 Unauthorized：请求未经授权
+          3. 403 Forbidden：禁止访问资源
+          4. 404 Not Found：请求资源不存在
     4. 5XX：服务器错误
 6. 持久连接：HTTP1.1版本支持keep-alive，连接持续有效，避免重新建立连接
 ## 缓存
